@@ -31,6 +31,8 @@ let contenedorEdit= document.querySelector("#editar-modal")
 let $lstInputEdit = contenedorEdit.querySelectorAll(".form-control");
   //let arrInputIds = retriveArrIds($lstInputAdd);
 
+let lstRdi = readFromLocalDB("ListaRdi")
+
 
 function addRDI(){
     createData();
@@ -41,8 +43,9 @@ function addRDI(){
 
 
 
+
 function createData(){
-    let lstRdi = readFromLocalDB("ListaRdi")
+    //let lstRdi = readFromLocalDB("ListaRdi")
     
     if ($lstInputAdd [0].value == 0 || $lstInputAdd [0].value == null) {
         const rdiObj = {
@@ -55,8 +58,15 @@ function createData(){
         }
     
         lstRdi.push(rdiObj);
-  
+       
+
+        
+        
     }
+   
+
+    
+  
     
     saveToLocalDB("ListaRdi", lstRdi);
     
@@ -64,35 +74,34 @@ function createData(){
 };
 
 
-
 function deleteData(btnEdit, nRdi){
-    let n=0;
-    let lstRdi = readFromLocalDB("ListaRdi");
+    
+    let lstRdi = readFromLocalDB("ListaRdi")
     btnEdit.parentElement.parentElement.remove();
-    /*lstRdi = lstRdi.filter((e)=>{
-        e.nRdi == nRdi;
-        console.log(`${e.nRdi} ${nRdi}  ${n++}`);
-    })*/
+    lstRdi.filter((e)=>{
+         e.nRdi !== nRdi;
+         
+        console.log(`${e.nRdi} ${nRdi} `);
+        console.log(e.nRdi != nRdi);
+    });
 
-    lstRdi2 = lstRdi.filter((e)=> e.nRdi !== nRdi);
-        
-        
+    
+    console.log(lstRdi);
+
     
 
- 
-    console.log(lstRdi2);
 }
 
 
-
+let $tBodyQ = document.querySelector("#tablaDatos");
 
 //READ -------------------------------------------------------------------
 function readData(){
 
-    let $tBodyQ = document.querySelector("#tablaDatos");
+    
     //let $lstInput = document.querySelectorAll("tbody > tr");
   
-    let lstRdi = readFromLocalDB("ListaRdi");
+    //let lstRdi = readFromLocalDB("ListaRdi");
     $tBodyQ.innerHTML="";
     lstRdi.forEach(e => { 
         $tBodyQ.innerHTML += `<tr>
@@ -117,7 +126,7 @@ function readData(){
 
 
 function editData(id){
-    let lstRdi = readFromLocalDB("ListaRdi");
+    //let lstRdi = readFromLocalDB("ListaRdi");
     let entrada = lstRdi[id -1];
 
     $lstInputEdit [0] = entrada.nRdi;
@@ -138,12 +147,12 @@ function editData(id){
 let btnGuardar = document.querySelector("#btnAdd");
 btnGuardar.addEventListener("click", addRDI)
 
-let btnEdit = document.querySelectorAll(".btn-info");
+/*let btnEdit = document.querySelectorAll(".btn-info");
 btnEdit.forEach((e)=>{
     e.addEventListener("click", (e)=>{
         editData(e.nRdi.match(/(\d+)/)[0]);
     });
-})
+})*/
   
 
 
