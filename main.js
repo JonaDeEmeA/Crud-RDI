@@ -29,10 +29,14 @@ let $lstInputAdd = contenedorAdd.querySelectorAll(".form-control");
 
 let contenedorEdit= document.querySelector("#editar-modal")  
 let $lstInputEdit = contenedorEdit.querySelectorAll(".form-control");
-  //let arrInputIds = retriveArrIds($lstInputAdd);
+
+const formRdi = document.querySelector(".row");
+
 
 let lstRdi = readFromLocalDB("ListaRdi")
 
+let btnGuardar = document.querySelector("#btnAdd");
+btnGuardar.addEventListener("click", addRDI);
 
 function addRDI(){
     createData();
@@ -44,8 +48,8 @@ function addRDI(){
 
 
 
+//CREATE -------------------------------------------------------------------
 function createData(){
-    //let lstRdi = readFromLocalDB("ListaRdi")
     
     if ($lstInputAdd [0].value == 0 || $lstInputAdd [0].value == null) {
         const rdiObj = {
@@ -58,39 +62,25 @@ function createData(){
         }
     
         lstRdi.push(rdiObj);
-       
 
-        
-        
     }
-   
 
-    
-  
-    
     saveToLocalDB("ListaRdi", lstRdi);
-    
-    //readData();
+
 };
 
-
+//DELETE -------------------------------------------------------------------
 function deleteData(btnEdit, nRdi){
-    
-    let lstRdi = readFromLocalDB("ListaRdi")
+      
     btnEdit.parentElement.parentElement.remove();
-    lstRdi.filter((e)=>{
-         e.nRdi !== nRdi;
-         
-        console.log(`${e.nRdi} ${nRdi} `);
-        console.log(e.nRdi != nRdi);
+    lstRdi = lstRdi.filter((e)=>{
+        return e.nRdi != nRdi;
     });
 
-    
+    saveToLocalDB("ListaRdi", lstRdi);
     console.log(lstRdi);
 
-    
-
-}
+};
 
 
 let $tBodyQ = document.querySelector("#tablaDatos");
@@ -98,10 +88,6 @@ let $tBodyQ = document.querySelector("#tablaDatos");
 //READ -------------------------------------------------------------------
 function readData(){
 
-    
-    //let $lstInput = document.querySelectorAll("tbody > tr");
-  
-    //let lstRdi = readFromLocalDB("ListaRdi");
     $tBodyQ.innerHTML="";
     lstRdi.forEach(e => { 
         $tBodyQ.innerHTML += `<tr>
@@ -113,7 +99,8 @@ function readData(){
         <td>${e.nomRes}</td>
         <td>${e.statusRdi}</td>
         <td>
-            <button type="button" class="btn btn-info col-6" data-bs-toggle="modal" data-bs-target="#editar-modal" id="btnEditar${e.nRdi}">Editar </button>
+            <button type="button" class="btn btn-info col-6" data-bs-toggle="modal" 
+            data-bs-target="#editar-modal" id="btnEditar${e.nRdi}" onclick="editData(this, '${e.nRdi}')" >Editar </button>
             <button type="button" class="btn btn-warning col-6"  id="btnBorrar${e.nRdi}" onclick="deleteData(this, '${e.nRdi}')">Borrar</button>
         </td>
 
@@ -122,30 +109,51 @@ function readData(){
         
     });
 
+    formRdi.reset();
+
+};
+
+readData();
+
+function editData(btnDel, nRdi){
+    
+    const rdiEdited = lstRdi.find((e)=>{
+        return e.nRdi == nRdi;
+    })
+    console.log(rdiEdited);
+
+    let arrRdiEdited = Object.values(rdiEdited);
+
+
+    for (let i = 0; i < $lstInputEdit.length; i++) {
+        
+        $lstInputEdit[i].value = arrRdiEdited[i];
+    }
+   
+
+
 };
 
 
-function editData(id){
-    //let lstRdi = readFromLocalDB("ListaRdi");
-    let entrada = lstRdi[id -1];
-
-    $lstInputEdit [0] = entrada.nRdi;
-    $lstInputEdit [1].innerHTML = "entrada.nFicha";
-    $lstInputEdit [2] = entrada.nomEsp;
-    $lstInputEdit [3] = entrada.obsRdi;
-    $lstInputEdit [4] = entrada.nomRes;
-    $lstInputEdit [5] = entrada.statusRdi;
-
-
-}
 
 
 
 
 
 
-let btnGuardar = document.querySelector("#btnAdd");
-btnGuardar.addEventListener("click", addRDI)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*let btnEdit = document.querySelectorAll(".btn-info");
 btnEdit.forEach((e)=>{
