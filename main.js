@@ -155,6 +155,8 @@ function editData(btnDel, nRdi){
 
 
 
+
+
 /*let btnEdit = document.querySelectorAll(".btn-info");
 btnEdit.forEach((e)=>{
     e.addEventListener("click", (e)=>{
